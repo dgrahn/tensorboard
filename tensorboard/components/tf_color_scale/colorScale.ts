@@ -130,15 +130,11 @@ namespace tf_color_scale {
     () => tf_backend.runsStore.getRuns()
   );
 
-  export const experimentsColorScaleObj = createAutoUpdateColorScale(
+  export const experimentsColorScale = createAutoUpdateColorScale(
     tf_backend.experimentsStore,
     () => {
       return tf_backend.experimentsStore.getExperiments().map(({name}) => name);
     }
   );
-
-
-  export const experimentsColorScale = (domain) => experimentsColorScaleObj.getColor(domain);
-
   
 } // tf_color_scale
