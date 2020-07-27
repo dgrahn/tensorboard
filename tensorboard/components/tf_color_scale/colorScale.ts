@@ -42,9 +42,7 @@ namespace tf_color_scale {
      */
     public setDomain(strings: string[]): this {
       this.identifiers = d3.map();
-      strings.forEach((s, i) => {
-        this.identifiers.set(s, this._palette[i % this._palette.length]);
-      });
+      strings.forEach(this.identifiers.set);
       return this;
     }
 
@@ -58,7 +56,8 @@ namespace tf_color_scale {
       if (!this.identifiers.has(s)) {
         throw new Error(`String ${s} was not in the domain.`);
       }
-      return this.identifiers.get(s) as string;
+      let i = this.identifiers.get(s);
+      return this._palette[i % this._palette.length];
     }
   }
 
@@ -78,7 +77,7 @@ namespace tf_color_scale {
     store.addListener(updateRunsColorScale);
 
     function updatePalette(): void {
-      let palette = tf_color_scale.palettes[tf_settings.getPalette()];
+      let palette = palettes[tf_settings.getPalette()];
       colorScale.setPalette(palette);
     }
     tf_settings.addPaletteListener(updatePalette);
