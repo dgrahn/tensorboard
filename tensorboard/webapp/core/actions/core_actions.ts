@@ -85,6 +85,14 @@ export const changePageSize = createAction(
 );
 
 /**
+ * Action for when user wants to change the palette.
+ */
+export const changePalette = createAction(
+  '[Core] Palette Change',
+  props<{palette: string}>()
+)
+
+/**
  * Action for when user wants to change the runs selection in the tf-runs-selector.
  *
  * Action is reserved for the wrapper for the Polymer based tf-runs-selector.

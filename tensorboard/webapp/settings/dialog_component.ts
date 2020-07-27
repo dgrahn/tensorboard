@@ -29,11 +29,13 @@ import {
   getReloadPeriodInMs,
   State,
   getPageSize,
+  getPalette,
 } from '../core/store';
 import {
   toggleReloadEnabled,
   changeReloadPeriod,
   changePageSize,
+  changePalette,
 } from '../core/actions';
 
 /** @typehack */ import * as _typeHackRxjs from 'rxjs';
@@ -97,12 +99,24 @@ export function createIntegerValidator(): ValidatorFn {
         Page size has to be a positive integer.
       </mat-error>
     </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Palette</mat-label>
+        <mat-select
+          [formControl]="paletteControl">
+          <mat-option *ngFor="let palette of palettes" [value]="palette">
+            {{palette}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   `,
   styleUrls: ['./dialog_component.css'],
 })
 export class SettingsDialogComponent implements OnInit, OnDestroy {
   readonly reloadEnabled$ = this.store.pipe(select(getReloadEnabled));
   readonly pageSize$ = this.store.pipe(select(getPageSize));
+  readonly palette$ = this.store.pipe(select(getPalette));
   private readonly reloadPeriodInSec$ = this.store.pipe(
     select(getReloadPeriodInSec)
   );
@@ -115,6 +129,24 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
     Validators.min(1),
     createIntegerValidator(),
   ]);
+  readonly paletteControl = new FormControl('', [
+    Validators.required,
+  ]);
+
+  readonly palettes = [
+    'googleStandard',
+    'googleCool',
+    'googleWarm',
+    'googleColorBlindAssist',
+    'tensorboardColorBlindAssist',
+    'colorBlindAssist1',
+    'colorBlindAssist2',
+    'colorBlindAssist3',
+    'colorBlindAssist4',
+    'colorBlindAssist5',
+    'mldash',
+    'tab20',
+  ];
 
   private ngUnsubscribe = new Subject();
 
@@ -171,6 +203,28 @@ export class SettingsDialogComponent implements OnInit, OnDestroy {
           changePageSize({size: this.paginationControl.value})
         );
       });
+
+    this.palette$
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        filter((value) => value !== this.paletteControl.value)
+      )
+      .subscribe((value) => {
+        this.paletteControl.setValue(value);
+      });
+    
+    this.paletteControl.valueChanges
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        debounceTime(500),
+        filter(() => this.paletteControl.valid)
+      )
+      .subscribe(() => {
+        var newPalette = this.paletteControl.value;
+        this.store.dispatch(
+          changePalette({palette: newPalette})
+        )
+      })
   }
 
   ngOnDestroy() {

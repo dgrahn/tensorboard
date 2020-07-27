@@ -18,14 +18,19 @@ import {Store, select} from '@ngrx/store';
 import {Subject} from 'rxjs';
 import {takeUntil, distinctUntilChanged} from 'rxjs/operators';
 
-import {State, getPageSize} from '../core/store';
+import {
+  State,
+  getPageSize,
+  getPalette,
+} from '../core/store';
 
 /** @typehack */ import * as _typeHackRxjs from 'rxjs';
 
-interface TfPaginatedViewStore extends HTMLElement {
-  tf_paginated_view: {
+interface TfSettingsStore extends HTMLElement {
+  tf_settings: {
     setLimit(limit: number): void;
-  };
+    setPalette(palette: string): void;
+  }
 }
 
 /**
@@ -45,9 +50,10 @@ interface TfPaginatedViewStore extends HTMLElement {
 export class SettingsPolymerInteropContainer {
   private readonly ngUnsubscribe = new Subject();
   private readonly getPageSize$ = this.store.pipe(select(getPageSize));
-  private readonly paginatedViewStore = (document.createElement(
-    'tf-paginated-view-store'
-  ) as TfPaginatedViewStore).tf_paginated_view;
+  private readonly getPalette$ = this.store.pipe(select(getPalette));
+  private readonly settingsStore = (document.createElement(
+    'tf-settings-store'
+  ) as TfSettingsStore).tf_settings;
 
   constructor(private store: Store<State>) {}
 
@@ -58,7 +64,16 @@ export class SettingsPolymerInteropContainer {
         distinctUntilChanged()
       )
       .subscribe((pageSize) => {
-        this.paginatedViewStore.setLimit(pageSize);
+        this.settingsStore.setLimit(pageSize);
+      });
+    
+    this.getPalette$
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        distinctUntilChanged()
+      )
+      .subscribe((palette) => {
+        this.settingsStore.setPalette(palette);
       });
   }
 

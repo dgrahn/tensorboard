@@ -75,6 +75,13 @@ export const getPageSize = createSelector(
   }
 );
 
+export const getPalette = createSelector(
+  selectCoreState,
+  (state: CoreState): string => {
+    return state.palette;
+  }
+)
+
 export const getRuns = createSelector(
   selectCoreState,
   (state: CoreState): Run[] => {

@@ -129,6 +129,37 @@ namespace tf_color_scale {
       '#0077B8',
       '#00B7ED',
     ],
+    tab20: [
+      '#aec7e8',
+      '#1f77b4',
+
+      '#ffbb78',
+      '#ff7f0e',
+
+      '#98df8a',
+      '#2ca02c',
+
+      '#ff9896',
+      '#d62728',
+
+      '#c5b0d5',
+      '#9467bd',
+
+      '#c49c94',
+      '#8c564b',
+
+      '#f7b6d2',
+      '#e377c2',
+
+      '#c7c7c7',
+      '#7f7f7f',
+
+      '#dbdb8d',
+      '#bcbd22',
+
+      '#9edae5',
+      '#17becf',
+    ]
   };
 
   export const standard = palettes.tensorboardColorBlindAssist;

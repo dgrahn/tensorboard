@@ -19,8 +19,8 @@ limitations under the License.
 <link rel="import" href="../paper-button/paper-button.html" />
 <link rel="import" href="../paper-input/paper-input.html" />
 <link rel="import" href="../tf-imports/polymer.html" />
+<link rel="import" href="../tf-settings-store/tf-settings-store.html" />
 <link rel="import" href="tf-dom-repeat.html" />
-<link rel="import" href="tf-paginated-view-store.html" />
 
 <!--
   tf-category-paginated-view takes a category and renders subset of its items
@@ -489,14 +489,14 @@ limitations under the License.
       ready() {
         this._setOpened(this.initialOpened == null ? true : this.initialOpened);
         this._limitListener = () => {
-          this.set('_limit', tf_paginated_view.getLimit());
+          this.set('_limit', tf_settings.getLimit());
         };
-        tf_paginated_view.addLimitListener(this._limitListener);
+        tf_settings.addLimitListener(this._limitListener);
         this._limitListener();
       },
 
       detached() {
-        tf_paginated_view.removeLimitListener(this._limitListener);
+        tf_settings.removeLimitListener(this._limitListener);
       },
 
       _updateRenderedItems(

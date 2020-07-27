@@ -34,6 +34,9 @@ export interface CoreState {
   // Size of a page in a general paginated view that is configurable by user via
   // settings.
   pageSize: number;
+
+  // Palette for color scales that is configurable via settings.
+  palette: string;
   environment: Environment;
   // TODO(stephanwlee): move these state to the `runs` features.
   // For now, we want them here for Polymer interop states reasons, too.
@@ -55,6 +58,7 @@ export const initialState: CoreState = {
   reloadPeriodInMs: 30000,
   reloadEnabled: false,
   pageSize: 12,
+  palette: 'tensorboardColorBlindAssist',
   environment: {
     data_location: '',
     window_title: '',

@@ -106,6 +106,12 @@ const reducer = createReducer(
       pageSize: nextPageSize,
     };
   }),
+  on(actions.changePalette, (state: CoreState, {palette}) => {
+    return {
+      ...state,
+      palette: palette,
+    };
+  }),
   on(actions.fetchRunSucceeded, (state, {runs}) => {
     // Do not modify the runSelection since the Polymer component is the
     // source of truth for the Polymer Interop.

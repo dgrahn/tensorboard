@@ -20,6 +20,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule, MatSelect} from '@angular/material/select';
 
 import {SettingsButtonComponent} from './settings_button_component';
 import {SettingsDialogComponent} from './dialog_component';
@@ -42,6 +43,7 @@ import {SettingsPolymerInteropContainer} from './polymer_interop_container';
     MatDialogModule,
     MatIconModule,
     MatInputModule,
+    MatSelectModule,
   ],
 })
 export class SettingsModule {}

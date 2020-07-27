@@ -22,6 +22,7 @@ tf_web_library(
         "//tensorboard/components/tf_imports:lodash",
         "//tensorboard/components/tf_imports:polymer",
         "//tensorboard/components/tf_paginated_view",
+        "//tensorboard/components/tf_settings_store",
         "//tensorboard/components/tf_storage",
         "@com_google_fonts_roboto",
         "@org_polymer_iron_icons",

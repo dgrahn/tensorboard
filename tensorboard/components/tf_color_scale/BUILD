@@ -17,6 +17,7 @@ tf_web_library(
         "//tensorboard/components/tf_backend",
         "//tensorboard/components/tf_imports:d3",
         "//tensorboard/components/tf_imports:polymer",
+        "//tensorboard/components/tf_settings_store",
     ],
 )
 
@@ -28,5 +29,6 @@ tensorboard_webcomponent_library(
         "//tensorboard/components/tf_backend:legacy",
         "//tensorboard/components/tf_imports:polymer_lib",
         "//tensorboard/components/tf_imports_google:lib",
+        "//tensorboard/components/tf_settings_store",
     ],
 )

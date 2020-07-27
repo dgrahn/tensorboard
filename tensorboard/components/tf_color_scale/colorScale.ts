@@ -28,7 +28,12 @@ namespace tf_color_scale {
      * @param {Array<string>} palette The color palette to use, as an
      *   Array of hex strings. Defaults to the standard palette.
      */
-    constructor(private readonly palette: string[] = standard) {}
+    constructor(private _palette: string[] = standard) {}
+
+    public setPalette(palette: string[]) {
+      this._palette = palette;
+      return this;
+    }
 
     /**
      * Set the domain of strings.
@@ -38,7 +43,7 @@ namespace tf_color_scale {
     public setDomain(strings: string[]): this {
       this.identifiers = d3.map();
       strings.forEach((s, i) => {
-        this.identifiers.set(s, this.palette[i % this.palette.length]);
+        this.identifiers.set(s, this._palette[i % this._palette.length]);
       });
       return this;
     }
@@ -66,10 +71,18 @@ namespace tf_color_scale {
     getDomain: () => string[]
   ): (runName: string) => string {
     const colorScale = new ColorScale();
+
     function updateRunsColorScale(): void {
       colorScale.setDomain(getDomain());
     }
     store.addListener(updateRunsColorScale);
+
+    function updatePalette(): void {
+      let palette = tf_color_scale.palettes[tf_settings.getPalette()];
+      colorScale.setPalette(palette);
+    }
+    tf_settings.addPaletteListener(updatePalette);
+
     updateRunsColorScale();
     return (domain) => colorScale.getColor(domain);
   }
