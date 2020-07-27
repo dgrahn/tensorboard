@@ -140,7 +140,7 @@ limitations under the License.
         /** @type {Function} */
         _colorScaleFunction: {
           type: Object, // function: string => string
-          value: () => (name) => tf_color_scale.runsColorScaleObj.getColor(name),
+          value: () => (name) => tf_color_scale.runsColorScale.getColor(name),
         },
         _runColor: {
           type: String,
@@ -167,10 +167,10 @@ limitations under the License.
 
       attached() {
         this.listener = () => this.redraw();
-        tf_color_scale.runsColorScaleObj.addListener(this.listener);
+        tf_color_scale.runsColorScale.addListener(this.listener);
       },
       detached() {
-        tf_color_scale.runsColorScaleObj.addListener(this.listener);
+        tf_color_scale.runsColorScale.addListener(this.listener);
       },
 
       redraw() {

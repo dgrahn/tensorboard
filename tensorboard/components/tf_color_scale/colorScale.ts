@@ -116,7 +116,7 @@ namespace tf_color_scale {
     updateDomain();
 
     tf_settings.addPaletteListener(() => {
-      console.log(`colorScale.ts: updating palette - ${tf_settings.getPalette()}`)
+      console.log(`colorScale.ts: updating palette - ${tf_settings.getPalette()}`)``
       let palette = palettes[tf_settings.getPalette()];
       colorScale.setPalette(palette);
       colorScale.setDomain(getDomain());
@@ -125,7 +125,7 @@ namespace tf_color_scale {
     return colorScale;
   }
 
-  export const runsColorScaleObj = createAutoUpdateColorScale(
+  export const runsColorScale = createAutoUpdateColorScale(
     tf_backend.runsStore,
     () => tf_backend.runsStore.getRuns()
   );
@@ -137,7 +137,7 @@ namespace tf_color_scale {
     }
   );
 
-  export const runsColorScale = (domain) => runsColorScaleObj.getColor(domain);
+
   export const experimentsColorScale = (domain) => experimentsColorScaleObj.getColor(domain);
 
   

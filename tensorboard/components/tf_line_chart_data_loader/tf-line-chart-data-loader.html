@@ -161,7 +161,7 @@ limitations under the License.
            */
           colorScale: {
             type: Object,
-            value: () => ({scale: (name) => tf_color_scale.runsColorScaleObj.getColor(name) }),
+            value: () => ({scale: (name) => tf_color_scale.runsColorScale.getColor(name) }),
           },
 
           _resetDomainOnNextLoad: {
@@ -199,12 +199,12 @@ limitations under the License.
 
         attached() {
           this.listener = () => this.redraw();
-          tf_color_scale.runsColorScaleObj.addListener(this.listener);
+          tf_color_scale.runsColorScale.addListener(this.listener);
         },
 
         detached() {
           cancelAnimationFrame(this._redrawRaf);
-          tf_color_scale.runsColorScaleObj.removeListener(this.listener);
+          tf_color_scale.runsColorScale.removeListener(this.listener);
         },
 
         exportAsSvgString() {

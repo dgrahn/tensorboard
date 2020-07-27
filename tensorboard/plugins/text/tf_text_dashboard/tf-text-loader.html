@@ -131,7 +131,7 @@ tf-text-loader displays markdown text data from the Text plugin.
       },
       observers: ['_changeRunColor(_runColor)'],
       _computeRunColor(run, refresh) {
-        return tf_color_scale.runsColorScaleObj.getColor(run);
+        return tf_color_scale.runsColorScale.getColor(run);
       },
       _changeRunColor(runColor) {
         this.updateStyles({
@@ -144,11 +144,11 @@ tf-text-loader displays markdown text data from the Text plugin.
         this.reload();
 
         this.listener = () => this.refresh += 1;
-        tf_color_scale.runsColorScaleObj.addListener(this.listener);
+        tf_color_scale.runsColorScale.addListener(this.listener);
       },
 
       detached() {
-        tf_color_scale.runsColorScaleObj.removeListener(this.listener);
+        tf_color_scale.runsColorScale.removeListener(this.listener);
       },
 
       reload() {

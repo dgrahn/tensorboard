@@ -57,7 +57,7 @@ var vz_mesh;
       /**@type {!Object} Wrapper to function to transform value into color.*/
       _colorScaleFunction: {
         type: Object, // function: string => string
-        value: () => (n) => tf_color_scale.runsColorScaleObj.getColor(n),
+        value: () => (n) => tf_color_scale.runsColorScale.getColor(n),
       },
       /**@type {string} Wrapper around function to compute color for a run.*/
       _runColor: {
