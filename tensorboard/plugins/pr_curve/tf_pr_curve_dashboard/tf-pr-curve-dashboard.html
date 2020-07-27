@@ -273,7 +273,7 @@ limitations under the License.
         );
       },
       _computeColorForRun(run) {
-        return tf_color_scale.runsColorScale(run);
+        return tf_color_scale.runsColorScaleObj.getColor(run);
       },
       _computeRelevantSelectedRuns(selectedRuns, runToTagInfo) {
         return selectedRuns.filter((run) => runToTagInfo[run]);

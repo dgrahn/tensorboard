@@ -205,9 +205,15 @@ future for loading older images.
         /** @type {{description: string, displayName: string}} */
         tagMetadata: Object,
 
+        // Used to trigger updating of the run color.
+        refresh: {
+          type: Number,
+          value: 0
+        },
+
         _runColor: {
           type: String,
-          computed: '_computeRunColor(run)',
+          computed: '_computeRunColor(run, refresh)',
         },
         actualSize: {
           type: Boolean,
@@ -289,8 +295,8 @@ future for loading older images.
         '_updateImageUrl(_currentStep, brightnessAdjustment, contrastPercentage)',
       ],
 
-      _computeRunColor(run) {
-        return tf_color_scale.runsColorScale(run);
+      _computeRunColor(run, refresh) {
+        return tf_color_scale.runsColorScaleObj.getColor(run);
       },
       _computeHasAtLeastOneStep(steps) {
         return !!steps && steps.length > 0;
@@ -321,10 +327,19 @@ future for loading older images.
       _getAriaExpanded() {
         return this.actualSize ? 'true' : 'false';
       },
+
       attached() {
         this._attached = true;
         this.reload();
+
+        this.listener = () => this.refresh += 1;
+        tf_color_scale.runsColorScaleObj.addListener(this.listener);
       },
+
+      detached() {
+        tf_color_scale.runsColorScaleObj.removeListener(this.listener);
+      },
+
       reload() {
         if (!this._attached) {
           return;

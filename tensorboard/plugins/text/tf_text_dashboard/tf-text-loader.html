@@ -100,9 +100,16 @@ tf-text-loader displays markdown text data from the Text plugin.
       properties: {
         run: String,
         tag: String,
+
+        // Used to trigger updating of the run color.
+        refresh: {
+          type: Number,
+          value: 0
+        },
+
         _runColor: {
           type: String,
-          computed: '_computeRunColor(run)',
+          computed: '_computeRunColor(run, refresh)',
         },
 
         // _texts: {
@@ -123,18 +130,27 @@ tf-text-loader displays markdown text data from the Text plugin.
         },
       },
       observers: ['_changeRunColor(_runColor)'],
-      _computeRunColor(run) {
-        return tf_color_scale.runsColorScale(run);
+      _computeRunColor(run, refresh) {
+        return tf_color_scale.runsColorScaleObj.getColor(run);
       },
       _changeRunColor(runColor) {
         this.updateStyles({
           '--tb-text-loader-outline': runColor,
         });
       },
+
       attached() {
         this._attached = true;
         this.reload();
+
+        this.listener = () => this.refresh += 1;
+        tf_color_scale.runsColorScaleObj.addListener(this.listener);
       },
+
+      detached() {
+        tf_color_scale.runsColorScaleObj.removeListener(this.listener);
+      },
+
       reload() {
         if (!this._attached) {
           return;

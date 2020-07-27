@@ -161,7 +161,7 @@ limitations under the License.
            */
           colorScale: {
             type: Object,
-            value: () => ({scale: tf_color_scale.runsColorScale}),
+            value: () => ({scale: (name) => tf_color_scale.runsColorScaleObj.getColor(name) }),
           },
 
           _resetDomainOnNextLoad: {

@@ -344,7 +344,7 @@ limitations under the License.
         return {
           scale: (name) => {
             const [exp, run] = JSON.parse(name);
-            return tf_color_scale.runsColorScale(run);
+            return tf_color_scale.runsColorScaleObj.getColor(run);
           },
         };
       },

@@ -103,7 +103,7 @@ limitations under the License.
       },
       observers: ['_updateStepsForNewRuns(runToAvailableTimeEntries)'],
       _computeColorForRun(run) {
-        return tf_color_scale.runsColorScale(run);
+        return tf_color_scale.runsColorScaleObj.getColor(run);
       },
       _computeTimeTextForRun(
         runToAvailableTimeEntries,
