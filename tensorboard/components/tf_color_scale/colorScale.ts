@@ -116,7 +116,7 @@ namespace tf_color_scale {
     updateDomain();
 
     tf_settings.addPaletteListener(() => {
-      console.log(`colorScale.ts: updating palette - ${tf_settings.getPalette()}`)``
+      console.log(`colorScale.ts: updating palette - ${tf_settings.getPalette()}`)
       let palette = palettes[tf_settings.getPalette()];
       colorScale.setPalette(palette);
       colorScale.setDomain(getDomain());
