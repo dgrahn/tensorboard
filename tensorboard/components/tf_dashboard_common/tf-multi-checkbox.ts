@@ -24,6 +24,8 @@ namespace tf_dashboard_common {
         type: Object,
         value: {
           getColor: () => '',
+          addListener: null,
+          removeListener: null,
         },
       },
       regex: {
@@ -86,6 +88,17 @@ namespace tf_dashboard_common {
       },
     },
     observers: ['_setIsolatorIcon(selectionState, names)'],
+    attached() {
+      if (this.coloring.addListener) {
+        this.listener = () => this.synchronizeColors();
+        this.coloring.addListener(this.listener);
+      }
+    },
+    detached() {
+      if (this.coloring.removeListener) {
+        this.coloring.removeListener(this.listener);
+      }
+    },
     _makeRegex: function(regexString) {
       try {
         return new RegExp(regexString);

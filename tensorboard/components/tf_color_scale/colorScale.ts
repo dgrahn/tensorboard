@@ -19,33 +19,48 @@ namespace tf_color_scale {
   // ccs.domain(runs);
   // ccs.getColor("train");
   // ccs.getColor("test1");
+  export type ColorScaleListener = () => void;
 
   export class ColorScale {
     private identifiers = d3.map();
+    private listeners: Set<ColorScaleListener> = null;
 
     /**
      * Creates a color scale with optional custom palette.
      * @param {Array<string>} palette The color palette to use, as an
      *   Array of hex strings. Defaults to the standard palette.
      */
-    constructor(private _palette: string[] = standard) {}
-
-    public setPalette(palette: string[]) {
-      this._palette = palette;
-      return this;
+    constructor(private _palette: string[] = standard) {
+      this.listeners = new Set<ColorScaleListener>();
     }
 
     /**
-     * Set the domain of strings.
-     * @param {Array<string>} strings - An array of possible strings to use as the
-     *     domain for your scale.
+     * Adds a listener to updates to the color scale.
+     * 
+     * @param listener the listener
      */
-    public setDomain(strings: string[]): this {
-      this.identifiers = d3.map();
-      strings.forEach(this.identifiers.set);
-      return this;
+    public addListener(listener: ColorScaleListener): void {
+      this.listeners.add(listener);
     }
 
+    /**
+     * Removes a listener from the color scale.
+     * 
+     * @param listener the listener
+     */
+    public removeListener(listener: ColorScaleListener): void {
+      this.listeners.delete(listener);
+    }
+
+    /**
+     * Triggers the listeners.
+     */
+    private triggerListeners(): void {
+      this.listeners.forEach((listener) => {
+        listener()
+      });
+    }
+    
     /**
      * Use the color scale to transform an element in the domain into a color.
      * @param {string} The input string to map to a color.
@@ -56,8 +71,31 @@ namespace tf_color_scale {
       if (!this.identifiers.has(s)) {
         throw new Error(`String ${s} was not in the domain.`);
       }
-      let i = this.identifiers.get(s);
+
+      let i = this.identifiers.get(s)
       return this._palette[i % this._palette.length];
+    }
+
+    /**
+     * Set the domain of strings.
+     * @param {Array<string>} strings - An array of possible strings to use as the
+     *     domain for your scale.
+     */
+    public setDomain(strings: string[]): this {
+      this.identifiers = d3.map();
+      strings.forEach((s, i) => this.identifiers.set(s, i));
+      return this;
+    }
+
+    /**
+     * Sets a new palette and triggers listeners.
+     * 
+     * @param palette the new palette
+     */
+    public setPalette(palette: string[]): this {
+      this._palette = palette;
+      this.triggerListeners();
+      return this;
     }
   }
 
@@ -68,33 +106,39 @@ namespace tf_color_scale {
   function createAutoUpdateColorScale(
     store: tf_backend.BaseStore,
     getDomain: () => string[]
-  ): (runName: string) => string {
+  ): ColorScale {
     const colorScale = new ColorScale();
 
-    function updateRunsColorScale(): void {
-      colorScale.setDomain(getDomain());
+    function updateDomain(): void {
+      colorScale.setDomain(getDomain())
     }
-    store.addListener(updateRunsColorScale);
+    store.addListener(updateDomain);
+    updateDomain();
 
-    function updatePalette(): void {
+    tf_settings.addPaletteListener(() => {
+      console.log(`colorScale.ts: updating palette - ${tf_settings.getPalette()}`)
       let palette = palettes[tf_settings.getPalette()];
       colorScale.setPalette(palette);
-    }
-    tf_settings.addPaletteListener(updatePalette);
+      colorScale.setDomain(getDomain());
+    });   
 
-    updateRunsColorScale();
-    return (domain) => colorScale.getColor(domain);
+    return colorScale;
   }
 
-  export const runsColorScale = createAutoUpdateColorScale(
+  export const runsColorScaleObj = createAutoUpdateColorScale(
     tf_backend.runsStore,
     () => tf_backend.runsStore.getRuns()
   );
 
-  export const experimentsColorScale = createAutoUpdateColorScale(
+  export const experimentsColorScaleObj = createAutoUpdateColorScale(
     tf_backend.experimentsStore,
     () => {
       return tf_backend.experimentsStore.getExperiments().map(({name}) => name);
     }
   );
+
+  export const runsColorScale = (domain) => runsColorScaleObj.getColor(domain);
+  export const experimentsColorScale = (domain) => experimentsColorScaleObj.getColor(domain);
+
+  
 } // tf_color_scale

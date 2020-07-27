@@ -197,8 +197,14 @@ limitations under the License.
           this.redraw();
         },
 
+        attached() {
+          this.listener = () => this.redraw();
+          tf_color_scale.runsColorScaleObj.addListener(this.listener);
+        },
+
         detached() {
           cancelAnimationFrame(this._redrawRaf);
+          tf_color_scale.runsColorScaleObj.removeListener(this.listener);
         },
 
         exportAsSvgString() {

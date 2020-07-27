@@ -164,6 +164,8 @@ Properties out:
           type: Object,
           value: {
             getColor: tf_color_scale.runsColorScale,
+            addListener: (l) => tf_color_scale.runsColorScaleObj.addListener(l),
+            removeListener: (l) => tf_color_scale.runsColorScale.removeListener(l),
           },
         },
       },
